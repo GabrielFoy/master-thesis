@@ -2,4 +2,5 @@ numpy
 matplotlib
 seaborn
 scipy
+tqdm
 "jax[cpu]"
