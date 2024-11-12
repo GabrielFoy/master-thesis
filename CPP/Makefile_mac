@@ -1,0 +1,34 @@
+# Makefile pour compiler le programme
+CXX = g++
+
+# Flags pour le compilateur
+CXXFLAGS = -Wall -Wextra -std=c++20 -I/opt/homebrew/include/eigen3 -I/opt/homebrew/include
+
+# Options spécifiques à GSL
+LDFLAGS = -L/opt/homebrew/lib -lgsl -lgslcblas -lm -pthread
+
+# Les fichiers sources et les fichiers objets
+SRCS = main.cpp simulation.cpp visualisation_convergence.cpp
+OBJS = $(SRCS:.cpp=.o)
+
+# Le nom des exécutables
+TARGETS = main.exe visualisation_convergence.exe
+
+# Règle par défaut - compile tous les exécutables
+all: $(TARGETS)
+
+# Règle pour l'édition de liens pour main.exe
+main.exe: main.o simulation.o
+	$(CXX) $^ -o $@ $(LDFLAGS)
+
+# Règle pour l'édition de liens pour visualisation_convergence.exe
+visualisation_convergence.exe: visualisation_convergence.o simulation.o
+	$(CXX) $^ -o $@ $(LDFLAGS)
+
+# Règle pour compiler les fichiers objets
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Nettoyer les fichiers objets et les exécutables
+clean:
+	rm -f $(OBJS) $(TARGETS)
